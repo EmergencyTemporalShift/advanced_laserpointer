@@ -47,7 +47,7 @@ TOOL.ClientConVar = {
 	entityout				= "0"
 }
 
-function TOOL.BuildCPanel(panel)
+function TOOL.BuildCPanel(panel) -- This pops up but doesn't pull the tool out
 	WireToolHelpers.MakePresetControl(panel, "wire_key_button")
 
 	ModelPlug_AddToCPanel_Multi(
