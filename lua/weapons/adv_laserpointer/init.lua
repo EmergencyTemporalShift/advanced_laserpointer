@@ -39,7 +39,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	-- Send a secondary signal
+	-- Send a secondary signal for a short time on rising edge
 	if IsValid(self.Receiver) then
 		Wire_TriggerOutput(self.Receiver,"SecondaryActive", 1)
 		
@@ -66,14 +66,14 @@ function SWEP:Reload()
 					if(oldReceiver == nil) then -- Is this the first link?
 						self:GetOwner():PrintMessage( HUD_PRINTTALK, "Successfully linked" )
 					else
-						self:GetOwner():PrintMessage( HUD_PRINTTALK, "Successfully linked to new receiver" )
+						self:GetOwner():PrintMessage( HUD_PRINTTALK, "Successfully linked to a new receiver" )
 					end
 				else
 					self:GetOwner():PrintMessage( HUD_PRINTTALK, "Link Failed. Something is wrong" )
 				end
 			end
 		end
-	else -- Change pointer settings with menu
+	else -- Change pointer settings with menu maybe
 		--TODO: Add menu
 	end
 end
