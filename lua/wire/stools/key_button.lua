@@ -34,6 +34,15 @@ if SERVER then
 	-- Uses default WireToolObj:MakeEnt's WireLib.MakeWireEnt function
 end
 
+CreateClientConVar( "wire_key_button_toggle", "0", true, false )
+CreateClientConVar( "wire_key_button_allow_set_lock", "0", true, false )
+CreateClientConVar( "wire_key_button_lock_controlled_toggle", "1", true, false )
+CreateClientConVar( "wire_key_button_output_lock_state", "0", true, false )
+CreateClientConVar( "wire_key_button_value_off", "0", true, false )
+CreateClientConVar( "wire_key_button_value_on", "1", true, false )
+CreateClientConVar( "wire_key_button_description", "", true, false )
+CreateClientConVar( "wire_key_button_entityout", "0", true, false )
+
 TOOL.ClientConVar = {
 	model 					= "models/props_c17/clock01.mdl",
 	model_category			= "button",
@@ -52,10 +61,10 @@ function TOOL.BuildCPanel(panel) -- This pops up but doesn't pull the tool out
 
 	ModelPlug_AddToCPanel_Multi(
 		panel,
-		{	button		 = "Normal",
-			button_small = "Small"
+		{	key_button		 = "Normal",
+			key_button_small = "Small"
 		},
-		"wire_button", "#Button_Model", 6
+		"wire_key_button", "#Button_Model", 6
 	)
 	panel:CheckBox("#WireKeyButtonTool_toggle",					"wire_key_button_toggle")
 	panel:CheckBox("#WireKeyButtonTool_allow_set_lock",			"wire_key_button_allow_set_lock")
@@ -65,3 +74,5 @@ function TOOL.BuildCPanel(panel) -- This pops up but doesn't pull the tool out
 	panel:NumSlider("#WireKeyButtonTool_value_on",				"wire_key_button_value_on", -10, 10, 1)
 	panel:NumSlider("#WireKeyButtonTool_value_off",				"wire_key_button_value_off", -10, 10, 1)
 end
+
+WireToolSetup.close()
