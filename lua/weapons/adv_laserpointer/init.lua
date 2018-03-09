@@ -34,7 +34,7 @@ function SWEP:PrimaryAttack()
 	if IsValid(self.Receiver) then
 		self.Pointing = true
 		self.Weapon:SetNWBool("PrimaryActive", true)
-		Wire_TriggerOutput(self.Receiver,"PrimaryActive",1)
+		WireLib.TriggerOutput(self.Receiver,"PrimaryActive",1)
 	else
 		self:GetOwner():PrintMessage( HUD_PRINTTALK, "No linked Receiver" )
 	end
@@ -44,7 +44,7 @@ function SWEP:FinishedPrimaryAttack()
 	if IsValid(self.Receiver) then
 		self.Pointing = false
 		self.Weapon:SetNWBool("PrimaryActive", false)
-		Wire_TriggerOutput(self.Receiver,"PrimaryActive",0)
+		WireLib.TriggerOutput(self.Receiver,"PrimaryActive",0)
 	end
 	-- self:GetOwner():PrintMessage( HUD_PRINTTALK, "FinishedPrimaryAttack" )
 end
@@ -52,13 +52,11 @@ end
 function SWEP:SecondaryAttack()
 	-- Send a secondary signal for a short time on rising edge
 	if IsValid(self.Receiver) then
-		Wire_TriggerOutput(self.Receiver,"SecondaryActive", 1)
+		WireLib.TriggerOutput(self.Receiver,"SecondaryActive", 1)
 		
 		timer.Create("adv_las_secondary_"..self:GetOwner():EntIndex(), 0.1, 1, function()
-			Wire_TriggerOutput(self.Receiver,"SecondaryActive", 0)
+			WireLib.TriggerOutput(self.Receiver,"SecondaryActive", 0)
 		end)
-		
-
 	end
 end
 
@@ -98,15 +96,15 @@ function SWEP:Think()
 			local trace = owner:GetEyeTrace()
 			local point = trace.HitPos
 			if (COLOSSAL_SANDBOX) then point = point * 6.25 end
-			Wire_TriggerOutput(self.Receiver, "X",			point.x)
-			Wire_TriggerOutput(self.Receiver, "Y",			point.y)
-			Wire_TriggerOutput(self.Receiver, "Z",			point.z)
-			Wire_TriggerOutput(self.Receiver, "Pos",		point)
-			Wire_TriggerOutput(self.Receiver, "UserX",		ownerPos.x)
-			Wire_TriggerOutput(self.Receiver, "UserY",		ownerPos.y)
-			Wire_TriggerOutput(self.Receiver, "UserZ",		ownerPos.z)
-			Wire_TriggerOutput(self.Receiver, "UserPos",	ownerPos)
-			Wire_TriggerOutput(self.Receiver, "RangerData", trace)
+			WireLib.TriggerOutput(self.Receiver, "X",			point.x)
+			WireLib.TriggerOutput(self.Receiver, "Y",			point.y)
+			WireLib.TriggerOutput(self.Receiver, "Z",			point.z)
+			WireLib.TriggerOutput(self.Receiver, "Pos",		point)
+			WireLib.TriggerOutput(self.Receiver, "UserX",		ownerPos.x)
+			WireLib.TriggerOutput(self.Receiver, "UserY",		ownerPos.y)
+			WireLib.TriggerOutput(self.Receiver, "UserZ",		ownerPos.z)
+			WireLib.TriggerOutput(self.Receiver, "UserPos",	ownerPos)
+			WireLib.TriggerOutput(self.Receiver, "RangerData", trace)
 			self.Receiver.VPos = point
 		end
 	else

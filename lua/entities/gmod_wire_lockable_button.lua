@@ -158,8 +158,8 @@ function ENT:Setup(toggle, allow_set_lock, lock_controlled_toggle, output_lock_s
 	if entityout then
 		add_output("EntID" , "NORMAL",
 				   "Entity", "ENTITY")
-		Wire_TriggerOutput(self, "EntID", 0)
-		Wire_TriggerOutput(self, "Entity", nil)
+		WireLib.TriggerOutput(self, "EntID", 0)
+		WireLib.TriggerOutput(self, "Entity", nil)
 		self.OutputEntID=true
 	else
 		self.OutputEntID=false
@@ -207,13 +207,13 @@ function ENT:Switch(on)
 		if self.OutputEntID then self.EntToOutput = NULL end
 	end
 
-	Wire_TriggerOutput(self, "Out", self.Value)
+	WireLib.TriggerOutput(self, "Out", self.Value)
 	if self.OutputEntID then
-		Wire_TriggerOutput(self, "EntID", self.EntToOutput:EntIndex())
-		Wire_TriggerOutput(self, "Entity", self.EntToOutput)
+		WireLib.TriggerOutput(self, "EntID", self.EntToOutput:EntIndex())
+		WireLib.TriggerOutput(self, "Entity", self.EntToOutput)
 	end
 	if self.OutputLockState then
-		Wire_TriggerOutput(self, "LockState", self.LockState)
+		WireLib.TriggerOutput(self, "LockState", self.LockState)
 	return true
 	end
 end
