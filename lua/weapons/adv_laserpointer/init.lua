@@ -31,20 +31,22 @@ hook.Add("PlayerBindUp", "FinishedPrimaryAttack", function(player, binding)
 end)
 
 function SWEP:PrimaryAttack()
-	--TODO: Make this be a dead mans switch instead of a toggle
 	if IsValid(self.Receiver) then
-		self.Pointing = !self.Pointing
-		self.Weapon:SetNWBool("PrimaryActive", self.Pointing)
-		
-		if self.Pointing then
-			Wire_TriggerOutput(self.Receiver,"PrimaryActive",1)
-		else
-			Wire_TriggerOutput(self.Receiver,"PrimaryActive",0)
-		end
+		self.Pointing = true
+		self.Weapon:SetNWBool("PrimaryActive", true)
+		Wire_TriggerOutput(self.Receiver,"PrimaryActive",1)
 	else
 		self:GetOwner():PrintMessage( HUD_PRINTTALK, "No linked Receiver" )
 	end
+end
 
+function SWEP:FinishedPrimaryAttack()
+	if IsValid(self.Receiver) then
+		self.Pointing = false
+		self.Weapon:SetNWBool("PrimaryActive", false)
+		Wire_TriggerOutput(self.Receiver,"PrimaryActive",0)
+	end
+	-- self:GetOwner():PrintMessage( HUD_PRINTTALK, "FinishedPrimaryAttack" )
 end
 
 function SWEP:SecondaryAttack()
