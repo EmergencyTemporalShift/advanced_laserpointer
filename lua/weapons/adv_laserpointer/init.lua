@@ -2,6 +2,8 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include('shared.lua')
 
+
+
 SWEP.Weight = 8
 SWEP.AutoSwitchTo = false
 SWEP.AutoSwitchFrom = false
@@ -20,6 +22,13 @@ function SWEP:Equip( newOwner )
 		newOwner:PrintMessage( HUD_PRINTTALK, "Relinked Sucessfully" )
 	end
 end
+
+hook.Add("PlayerBindUp", "FinishedPrimaryAttack", function(player, binding)
+    if binding ~= "attack" then return end
+    local weapon = player:GetActiveWeapon()
+    if not IsValid(weapon) or not weapon:IsWeapon() or not weapon.FinishedPrimaryAttack then return end
+    weapon:FinishedPrimaryAttack()
+end)
 
 function SWEP:PrimaryAttack()
 	--TODO: Make this be a dead mans switch instead of a toggle

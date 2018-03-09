@@ -2,11 +2,8 @@ SWEP.Author = "EmergencyTemporalShift"
 SWEP.Contact = ""
 SWEP.Purpose = ""
 SWEP.Instructions = "Left Click to send a target vector and PrimaryActive signal.\n Right click to send a SecondaryActive signal.\n Reload on an advanced laser receiver to pair."
-<<<<<<< HEAD
+
 SWEP.Category = "ETS's Mod"
-=======
-SWEP.Category = "Advanced Laser Pointer"
->>>>>>> refs/remotes/origin/master
 
 SWEP.Spawnable = true;
 SWEP.AdminOnly = false
