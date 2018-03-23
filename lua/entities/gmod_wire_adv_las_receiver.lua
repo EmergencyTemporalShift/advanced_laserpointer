@@ -10,7 +10,7 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
 	self:SetUseType( SIMPLE_USE )
-	self.Outputs = WireLib.CreateSpecialOutputs(self, {"PrimaryActive", "SecondaryActive", "X", "Y", "Z", "UserX", "UserY", "UserZ", "Pos", "UserPos", "RangerData"}, {"NORMAL", "NORMAL","NORMAL", "NORMAL", "NORMAL", "NORMAL", "NORMAL", "NORMAL", "VECTOR", "VECTOR", "RANGER"})
+	self.Outputs = WireLib.CreateSpecialOutputs(self, {"PrimaryActive", "SecondaryActive", "X", "Y", "Z", "UserX", "UserY", "UserZ", "Pos [VECTOR]", "UserPos [VECTOR]", "RangerData [RANGER]"})
 	self.VPos = Vector(0,0,0)
 
 	self:SetOverlayText( "Advanced Laser Pointer Receiver" )
