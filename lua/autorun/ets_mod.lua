@@ -49,9 +49,9 @@ function interpPuts(putString) -- inPUT outPUT STRING
 	end
 	
 	-- Add type TODO: Do it dynamically
-	for i = 1, #inputs do
-		inputs[i] = inputs[i] .. " [NORMAL]"
-	end
+	--for i = 1, #inputs do
+		--inputs[i] = inputs[i] .. " [NORMAL]"
+	--end
 	
 	return inputs, outputs
 end
@@ -73,5 +73,20 @@ function flattenTable(arr)
 	return result
 end
 
+function mergeTypes(names, _type)
+	local out = {}
+	for s = 1, #names do
+		out[2*s-1] = names[s]
+		out[2*s] = _type
+	end
+	return out
+end
+
+function appendTypes(names, _type)
+	for s = 1, #names do
+		names[s] = names[s] .. " [" .. _type .. "]"
+	end
+	return names
+end
 
 print("EmergencyTemporalShift's mod has loaded")

@@ -71,12 +71,22 @@ function ENT:Setup(io_table)
 			
 	end
 	
+	ins, outs = interpPuts(GetConVar("wire_grouper_table"):GetString())
+	ins = appendTypes(ins, "NORMAL")
+	outs = appendTypes(flattenTable(outs), "NORMAL")
+	print(tableToString(ins))
+	print(tableToString(outs))
+	
+	add_input(ins)
+	add_output(flattenTable(outs))
 	add_input("In", "NORMAL")
 	add_output("Out", "NORMAL")
 	
 	
-	WireLib.AdjustSpecialInputs(self, inames, itypes, {})
-	WireLib.AdjustSpecialOutputs(self, onames, otypes, {})
+	--WireLib.AdjustSpecialInputs(self, inames, itypes, {})
+	WireLib.AdjustSpecialInputs(self, ins, nil, {})
+	--WireLib.AdjustSpecialOutputs(self, onames, otypes, {})
+	WireLib.AdjustSpecialOutputs(self, outs, nil, {})
 end
 
 function ENT:ShowOutput()
