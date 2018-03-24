@@ -29,6 +29,12 @@ TOOL.ClientConVar = {
 	table					= "in1:out1a,out1b;in2:out2a,out2b"
 }
 
+--function TOOL:MakeEnt(player, model, angle, trace)
+--	local ent = ents.Create("gmod_wire_Grouper")
+--	ent:SetPos(trace.HitPos)
+--	ent:Spawn()
+--end
+
 function TOOL.BuildCPanel(panel)
 	WireToolHelpers.MakePresetControl(panel, "wire_grouper")
 	

@@ -10,40 +10,7 @@ function ENT:SetupDataTables()
 	--self:NetworkVar( "Bool", 0, "On" )
 end
 
--- I don't know if I should define this here but I can move it later
-function interpPuts(putString) -- inPUT outPUT STRING
-	local temp = {}
-    local inputs = {}
-    local outputs = {}
-	
-	local i = 1
-    local j = 1
 
-	for sub in (putString .. ";"):gmatch("([^;]*)%;") do
-		temp[i] = sub
-		--print(sub)
-		i = i+1
-	end
-
-    for i = 1, #temp do
-		ins = (temp[i] .. ":"):match("([^:]*)%:")
-			inputs[i] = ins
-			temp[i] = temp[i]:gsub(ins .. ":", "")
-			--print("ins: " .. ins)
-	end
-	
-	
-	for i = 1, #temp do
-		j = 1
-		outputs[i] = {}
-		for outs in (temp[i] .. ","):gmatch("([^,]*)%,") do
-			outputs[i][j] = outs
-			--print(outs)
-			j = j+1
-		end
-	end
-	return inputs, outputs
-end
 
 if CLIENT then
 	local halo_ent, halo_blur
@@ -72,9 +39,14 @@ function ENT:Initialize()
 	
 	local ins, outs
 	ins, outs = interpPuts("in1:out1a,out1b;in2:out2a,out2b") -- Pull down wire_grouper_table
-
+	
+	print()
+	print("ins: " .. tableToString(ins))
+	print("outs: " .. tableToString(outs))
+	print("flat: " .. tableToString(flattenTable(outs)))
+	
 	self.Inputs = WireLib.CreateInputs(self, ins)
-	self.Outputs = WireLib.CreateOutputs(self, outs)
+	self.Outputs = WireLib.CreateOutputs(self, flattenTable(outs))
 end
 
 function ENT:Setup(io_table)
