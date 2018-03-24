@@ -37,8 +37,10 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS )
 	--self:SetUseType( SIMPLE_USE )
 	
-	local ins, outs
-	ins, outs = interpPuts("in1:out1a,out1b;in2:out2a,out2b") -- Pull down wire_grouper_table
+	--ins, outs
+	ins, outs = interpPuts(GetConVar("wire_grouper_table"):GetString()) -- Pull down wire_grouper_table
+	local instype = appendTypes(ins, "NORMAL")
+	local outstype = appendTypes(flattenTable(outs), "NORMAL")
 	
 	print()
 	print("ins: " .. tableToString(ins))
@@ -72,21 +74,32 @@ function ENT:Setup(io_table)
 	end
 	
 	ins, outs = interpPuts(GetConVar("wire_grouper_table"):GetString())
-	ins = appendTypes(ins, "NORMAL")
-	outs = appendTypes(flattenTable(outs), "NORMAL")
+	local instype = appendTypes(ins, "NORMAL")
+	local outstype = appendTypes(flattenTable(outs), "NORMAL")
 	print(tableToString(ins))
 	print(tableToString(outs))
 	
-	add_input(ins)
-	add_output(flattenTable(outs))
-	add_input("In", "NORMAL")
-	add_output("Out", "NORMAL")
+	add_input(instype)
+	add_output(outstype)
+	--add_input("In", "NORMAL")
+	--add_output("Out", "NORMAL")
 	
 	
 	--WireLib.AdjustSpecialInputs(self, inames, itypes, {})
-	WireLib.AdjustSpecialInputs(self, ins, nil, {})
+	WireLib.AdjustSpecialInputs(self, instype, nil, {})
 	--WireLib.AdjustSpecialOutputs(self, onames, otypes, {})
-	WireLib.AdjustSpecialOutputs(self, outs, nil, {})
+	WireLib.AdjustSpecialOutputs(self, outstype, nil, {})
+end
+
+function ENT:TriggerInput(name, value)
+	for i = 1, #ins do
+		if name == ins[i] then
+			for j = 1, #outs[i] do
+				WireLib.TriggerOutput(self, outs[i][j], value)
+			end
+			return -- After the above loop runs we should be done
+		end
+	end
 end
 
 function ENT:ShowOutput()

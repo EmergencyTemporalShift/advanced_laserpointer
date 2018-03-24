@@ -83,10 +83,11 @@ function mergeTypes(names, _type)
 end
 
 function appendTypes(names, _type)
+	local _names = {}
 	for s = 1, #names do
-		names[s] = names[s] .. " [" .. _type .. "]"
+		_names[s] = names[s] .. " [" .. _type .. "]"
 	end
-	return names
+	return _names
 end
 
 print("EmergencyTemporalShift's mod has loaded")
