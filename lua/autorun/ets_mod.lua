@@ -3,9 +3,9 @@ function tableToString(o, listIndexes)
       local s = '{ '
       for k,v in pairs(o) do
          if type(k) ~= 'number' then k = '"'..k..'"' end
-		 if listIndexes == nil or listIndexes == true then
+		 if listIndexes == nil or listIndexes == false then
 			 s = s .. tableToString(v) .. ','
-		 elseif listIndexes == false then
+		 elseif listIndexes == true then
 			s = s .. '['..k..'] = ' .. tableToString(v) .. ','
 		 end
       end
@@ -31,7 +31,7 @@ function interpPuts(putString) -- inPUT outPUT STRING
 	end
 
     for i = 1, #temp do
-		ins = (temp[i] .. ":"):match("([^:]*)%:")
+		local ins = (temp[i] .. ":"):match("([^:]*)%:")
 			inputs[i] = ins
 			temp[i] = temp[i]:gsub(ins .. ":", "")
 			--print("ins: " .. ins)
@@ -41,9 +41,9 @@ function interpPuts(putString) -- inPUT outPUT STRING
 	for i = 1, #temp do
 		j = 1
 		outputs[i] = {}
-		for outs in (temp[i] .. ","):gmatch("([^,]*)%,") do
-			outputs[i][j] = outs
-			--print(outs)
+		for ets_outs in (temp[i] .. ","):gmatch("([^,]*)%,") do
+			outputs[i][j] = ets_outs
+			--print(ets_outs)
 			j = j+1
 		end
 	end
@@ -89,5 +89,27 @@ function appendTypes(names, _type)
 	end
 	return _names
 end
+
+function removeDupes(items, clean)
+  local r,dup,c,NaN = {},{},1,{}  
+  for i=1,#items do
+    local e = items[i]
+    local k = e~=e and NaN or e
+    if k~=nil and not dup[k] then  
+      c, r[c], dup[k]= c+1, e, true 
+    end
+  end
+  if clean == nil or clean == true then return cleanNils(r)
+  else return r end
+end
+
+function cleanNils(t)
+  local ans = {}
+  for _,v in pairs(t) do
+    ans[ #ans+1 ] = v
+  end
+  return ans
+end
+
 
 print("EmergencyTemporalShift's mod has loaded")

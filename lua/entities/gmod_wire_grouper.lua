@@ -32,28 +32,41 @@ if CLIENT then
 end
 
 function ENT:Initialize()
+	print("InitCalled")
+	print(tostring(self))
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
-	--self:SetUseType( SIMPLE_USE )
 	
-	--ins, outs
-	ins, outs = interpPuts(GetConVar("wire_grouper_table"):GetString()) -- Pull down wire_grouper_table
-	local instype = appendTypes(ins, "NORMAL")
-	local outstype = appendTypes(flattenTable(outs), "NORMAL")
+	ets_ins = ets_ins or {}
+	ets_outs = ets_outs or {}
+	ets_ins[self] = ets_ins[self] or {}
+	ets_outs[tostring(self)] = ets_outs[self] or {}
+	--ets_ins, ets_outs
+	ets_ins[self], ets_outs[self] = interpPuts(GetConVar("wire_grouper_table"):GetString()) -- Pull down wire_grouper_table
+	local ets_instype = appendTypes(ets_ins[self], "NORMAL")
+	local ets_outs_processed = removeDupes(flattenTable(ets_outs[self]))
+	local ets_outstype = appendTypes(ets_outs_processed, "NORMAL")
+
 	
 	print()
-	print("ins: " .. tableToString(ins))
-	print("outs: " .. tableToString(outs))
-	print("flat: " .. tableToString(flattenTable(outs)))
+	print("ins: " .. tableToString(ets_ins[self]))
+	print("outs: " .. tableToString(ets_outs[self]))
+	print("flat_outs: " .. tableToString(ets_outs_processed,true))
 	
-	self.Inputs = WireLib.CreateInputs(self, ins)
-	self.Outputs = WireLib.CreateOutputs(self, flattenTable(outs))
+	self.Inputs = WireLib.CreateInputs(self, ets_ins[self])
+	self.Outputs = WireLib.CreateOutputs(self, ets_outs_processed)
 end
 
 function ENT:Setup(io_table)
+	print("SetupCalled")
 	-- Shamelessly stolen from the wire ranger, It really should be built in, at least a version of it
 	-- TODO: Recreate functions to take one input and type and one or more outputs with the same type
+	
+	ets_ins = ets_ins or {}
+	ets_outs = ets_outs or {}
+	ets_ins[tostring(self)] = ets_ins[self] or {}
+	ets_outs[tostring(self)] = ets_outs[self] or {}
 	
 	local onames, otypes = {}, {}
 	local function add_output(...)
@@ -73,29 +86,28 @@ function ENT:Setup(io_table)
 			
 	end
 	
-	ins, outs = interpPuts(GetConVar("wire_grouper_table"):GetString())
-	local instype = appendTypes(ins, "NORMAL")
-	local outstype = appendTypes(flattenTable(outs), "NORMAL")
-	print(tableToString(ins))
-	print(tableToString(outs))
+	ets_ins[self], ets_outs[self] = interpPuts(GetConVar("wire_grouper_table"):GetString())
+	local ets_instype = appendTypes(ets_ins[self], "NORMAL")
+	local ets_outs_processed = removeDupes(flattenTable(ets_outs[self]))
+	local ets_outstype = appendTypes(ets_outs_processed, "NORMAL")
+	print("etsins: " .. tableToString(ets_ins[self],true))
+	print("etsouts: " .. tableToString(ets_outs[self],true))
 	
-	add_input(instype)
-	add_output(outstype)
-	--add_input("In", "NORMAL")
-	--add_output("Out", "NORMAL")
+	add_input(ets_instype)
+	add_output(ets_outstype)
 	
 	
 	--WireLib.AdjustSpecialInputs(self, inames, itypes, {})
-	WireLib.AdjustSpecialInputs(self, instype, nil, {})
+	WireLib.AdjustSpecialInputs(self, ets_instype, nil, {})
 	--WireLib.AdjustSpecialOutputs(self, onames, otypes, {})
-	WireLib.AdjustSpecialOutputs(self, outstype, nil, {})
+	WireLib.AdjustSpecialOutputs(self, ets_outstype, nil, {})
 end
 
 function ENT:TriggerInput(name, value)
-	for i = 1, #ins do
-		if name == ins[i] then
-			for j = 1, #outs[i] do
-				WireLib.TriggerOutput(self, outs[i][j], value)
+	for i = 1, #ets_ins[self] do
+		if name == ets_ins[self][i] then
+			for j = 1, #ets_outs[self][i] do
+				WireLib.TriggerOutput(self, ets_outs[self][i][j], value)
 			end
 			return -- After the above loop runs we should be done
 		end
